@@ -8,9 +8,10 @@ app.use(express.urlencoded({extended: false}));
 app.use(cors());
 
 app.get('/', (req:Request, res:Response) => {
-
+    return res.send('Rota padrão');
 });
 
-app.listen(8080,() => {
+const port = process.env.PORT || 8080;
+app.listen(port,() => {
     console.log('Api rodando');
 });

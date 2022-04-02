@@ -54,15 +54,15 @@ function findUserID(req: any, res: Response, next: NextFunction) {
 app.post('/register', (req: Request, res: Response) => {
     const { name, password } = req.body;
     const user = new User(name, password);
-    
+
     if (users.find(username => user.name === name)) {
         return res.json({
             msg: 'Usuário já existe.'
         });
     };
-    
+
     users.push(user);
-    
+
     return res.status(201).json({
         msg: 'Usuário criado com sucesso!!'
     });
@@ -71,7 +71,7 @@ app.post('/register', (req: Request, res: Response) => {
 app.post('/login', (req: Request, res: Response) => {
     const { name, password } = req.body;
     const user = users.find(username => username.name === name);
-    
+
     if (user) {
         const pw = user.password === password;
         if (pw) {
@@ -142,7 +142,7 @@ app.put('/notes/:userId/:noteId', (req: Request, res: Response) => {
 });
 
 app.delete('/notes/:userId/delete-notes/:noteId', (req: Request, res: Response) => {
-    const {userId, noteId} = req.params;
+    const { userId, noteId } = req.params;
     const userID = users.findIndex((userid) => userid.id === parseInt(userId));
     const noteID = users[userID].notes.findIndex((note) => note.id === parseInt(noteId));
 

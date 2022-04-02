@@ -15,7 +15,7 @@ declare global {
             userIndex: number
         }
     }
-}
+};
 
 const users: User[] = [];
 
@@ -27,64 +27,51 @@ const notes: Array<INotes> = [];
 
 function findUser(req: any, res: Response, next: NextFunction) {
     const { id } = req.params;
-    const user = users.find((search) => search.id === parseInt(id))
+    const user = users.find((search) => search.id === parseInt(id));
 
     if (!user) {
         return res.status(404).json({
             mensagem: 'Usuário não encontrado!'
-        })
-    }
+        });
+    };
     req.user = user;
     next();
 };
 
 function findUserID(req: any, res: Response, next: NextFunction) {
     const { id } = req.params;
-    const idUsuario = users.findIndex((userid) => userid.id === parseInt(id))
+    const idUsuario = users.findIndex((userid) => userid.id === parseInt(id));
 
     if (idUsuario < 0) {
         return res.status(404).json({
             mensagem: 'Usuário inválido'
-        })
-    }
+        });
+    };
 
     next();
 };
 
-app.get('/index-users', (req: Request, res: Response) => {
-    return res.json(users.map(user => {
-        return {
-            name: user.name,
-            id: user.id
-        }
-    }))
-});
-
-app.get('/show-user/:id', findUser, (req: any, res: Response) => {
-    return res.json(req.user);
-})
-
 app.post('/register', (req: Request, res: Response) => {
     const { name, password } = req.body;
     const user = new User(name, password);
-
+    
     if (users.find(username => user.name === name)) {
         return res.json({
             msg: 'Usuário já existe.'
-        })
-    }
-
+        });
+    };
+    
     users.push(user);
-
+    
     return res.status(201).json({
         msg: 'Usuário criado com sucesso!!'
-    })
+    });
 });
 
-app.post('login', (req: Request, res: Response) => {
+app.post('/login', (req: Request, res: Response) => {
     const { name, password } = req.body;
     const user = users.find(username => username.name === name);
-
+    
     if (user) {
         const pw = user.password === password;
         if (pw) {
@@ -92,14 +79,27 @@ app.post('login', (req: Request, res: Response) => {
         } else {
             return res.status(404).json({
                 msg: 'Senha inválida!'
-            })
-        }
+            });
+        };
     } else {
         return res.status(404).json({
             msg: 'Usuário não encontrado!'
-        })
-    }
+        });
+    };
     return res.sendStatus(200);
+});
+
+app.get('/index-users', (req: Request, res: Response) => {
+    return res.json(users.map(user => {
+        return {
+            name: user.name,
+            id: user.id
+        };
+    }));
+});
+
+app.get('/show-user/:id', findUser, (req: any, res: Response) => {
+    return res.json(req.user);
 });
 
 app.post('/notes/:id/new-note', findUserID, (req: Request, res: Response) => {
@@ -112,7 +112,7 @@ app.post('/notes/:id/new-note', findUserID, (req: Request, res: Response) => {
 
     return res.status(201).json({
         msg: 'Recado criado.'
-    })
+    });
 });
 
 app.get('/notes-index/:userId', (req: Request, res: Response) => {
